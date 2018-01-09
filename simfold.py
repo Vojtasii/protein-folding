@@ -1,12 +1,6 @@
 from itertools import accumulate
 from ComplexNumber import ComplexNumber
-
-
-def read_from_file(file):
-    with open(file, 'rt', encoding='utf-8') as f:
-        for line in f:
-            yield line.split()
-
+from folding_utils import read_from_file
 
 class BaseFolding:
     def __init__(self):
@@ -34,7 +28,7 @@ class SpiralFolding(BaseFolding):
         step = 0
         for i in range(seq_len - 1):
             step += 1
-            configuration[i] = str(conf)
+            configuration[i] = conf
             if step == steps:
                 step = 0
                 conf *= left_turn
