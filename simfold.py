@@ -28,6 +28,7 @@ class SpiralFolding(BaseFolding):
         seq_len = len(seq)
         configuration = [None] * (seq_len - 1)
         conf = ComplexNumber(1, 0)
+        left_turn = ComplexNumber(0, 1)
         turns = 0
         steps = 1
         step = 0
@@ -36,7 +37,7 @@ class SpiralFolding(BaseFolding):
             configuration[i] = str(conf)
             if step == steps:
                 step = 0
-                conf *= ComplexNumber(0, 1)
+                conf *= left_turn
                 turns += 1
                 if turns % 2 == 0:
                     steps += 1

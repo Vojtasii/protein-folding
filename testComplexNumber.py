@@ -2,8 +2,8 @@ from ComplexNumber import ComplexNumber
 
 
 if __name__ == "__main__":
-    a = ComplexNumber(1, 1)
-    b = ComplexNumber(1, 1)
+    a = ComplexNumber(-1, 0)
+    b = ComplexNumber(0, 1)
     size_of_a = a.size() # size of the complex number
     c = a*b # c must be also a Lesson2 object, use __add__
     print(size_of_a)
