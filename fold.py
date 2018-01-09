@@ -1,9 +1,13 @@
-def fold (file):
-    with open('folding.txt', 'w', encoding='utf-8') as w:
-        with open(file, 'rt', encoding='utf-8') as f:
-            for line in f:
-                l = line.split()
-                w.write(' '.join(l) + '\n')
+import simfold
+
+
+def write_configurations(file, config_list):
+    with open(file, 'w', encoding='utf-8') as w:
+        for config in config_list:
+            w.write(' '.join(config) + '\n')
+
 
 if __name__ == '__main__':
-    fold('sequences_public.txt')
+    pf = simfold.SpiralFolding()
+    pf.fold('sequences_public.txt')
+    write_configurations('folding.txt', pf.get_folding_list())

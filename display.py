@@ -3,43 +3,50 @@ import os
 import shutil
 import tempfile
 
-def display(file):
+def display(sequences, configurations):
     w = turtle.Screen()
     t = turtle.Turtle()
     t.speed(0)
-    t.penup()
-    t.setpos(-256,256)
-    t.pendown()
-    with open(file, 'rt', encoding='utf-8') as f:
-        for line in f:
-            l = list(line.split())
-            for i in l:
-                #t.rt(-90)
-                if i == '1':
-                    #print('*', end=' ')
-                    #t.begin_fill()
-                    #t.circle(5)
-                    #t.end_fill()
-                    t.dot(10,'blue')
-                else:
-                    #print('o', end=' ')
-                    #t.circle(5)
-                    t.dot(10,'red')
-                #t.rt(90)
-                t.forward(20)
-                #t.penup()
-                #t.setpos(t.xcor() + 10, t.ycor())
-                #t.pendown()
-            t.penup()
-            t.setpos(-256, t.ycor() - 20)
-            t.pendown()
-            #print('\n')
-    ts = t.getscreen()
-    ts.getcanvas().postscript(file='proteins.eps')
+    with open(sequences, 'rt', encoding='utf-8') as s:
+        with open(configurations, 'rt', encoding='utf-8') as c:
+            for seq in s:
+                for conf in c:
+                    cf = list(conf.split())
+                    sq = list(seq.split())
+                    for i, j in zip(sq, cf):
+                        if i == '1':
+                            t.dot(10, 'blue')
+                            if j == '-1j':
+                                t.seth(180)
+                                t.forward(20)
+                            elif j == '1j':
+                                t.seth(0)
+                                t.forward(20)
+                            elif j == '-1':
+                                t.seth(270)
+                                t.forward(20)
+                            else:
+                                t.seth(90)
+                                t.forward(20)
+                        else:
+                            t.dot(10, 'red')
+                            if j == '-1j':
+                                t.seth(180)
+                                t.forward(20)
+                            elif j == '1j':
+                                t.seth(0)
+                                t.forward(20)
+                            elif j == '-1':
+                                t.seth(270)
+                                t.forward(20)
+                            else:
+                                t.seth(90)
+                                t.forward(20)
+    print(t.pos())
     w.exitonclick()
 
 if __name__ == '__main__':
-    display('folding.txt')
+    display('sequences_public.txt','folding.txt')
 
 '''
     w = turtle.Screen()
