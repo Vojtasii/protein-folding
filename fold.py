@@ -1,9 +1,10 @@
 from itertools import accumulate
 import simfold
 import folding_utils
+from ComplexNumber import ComplexNumber
 
 
-SEQ_DIR = 'sequences_public.txt'
+SEQ_DIR = 'sequences.txt'
 CONF_DIR = 'folding.txt'
 
 
@@ -14,15 +15,17 @@ def write_configurations(file, config_list):
 
 
 def write_free_energy(file, config_list):
+    i = 1
     for s, c in zip(folding_utils.read_from_file(SEQ_DIR), config_list):
-        p = [0]
+        p = [ComplexNumber(0,0)]
         p.extend(accumulate(c))
-        folding_utils.compute_free_energy(s, p)
+        print(i, folding_utils.compute_free_energy(s, p))
+        i += 1
 
 
 if __name__ == '__main__':
     pf = simfold.SpiralFolding()
-    pf.fold('sequences_public.txt')
+    pf.fold(SEQ_DIR)
     folding_list = pf.get_folding_list()
-    write_configurations('folding.txt', folding_list)
+    write_configurations(CONF_DIR, folding_list)
     write_free_energy(SEQ_DIR, folding_list)
