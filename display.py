@@ -11,6 +11,7 @@ def display(sequences, configurations):
     t = turtle.Turtle()
     t.penup()
     t.setpos(-280,260)
+    t.pendown()
     t.speed(0)
     m = 0
     p = 0
@@ -20,7 +21,7 @@ def display(sequences, configurations):
                 cf = list(conf.split())
                 sq = list(seq.split())
                 for i, j in zip(sq, cf):
-                    if i == '1':
+                    if i == '0':
                         t.dot(10, 'blue')
                     else:
                         t.dot(10, 'red')
@@ -36,7 +37,7 @@ def display(sequences, configurations):
                     else:
                         t.seth(0)
                         t.forward(20)
-                if sq[len(sq) - 1] == '1':
+                if sq[len(sq) - 1] == '0':
                     t.dot(10, 'blue')
                 else:
                     t.dot(10, 'red')
