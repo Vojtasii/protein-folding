@@ -52,4 +52,4 @@ def display(sequences, configurations):
     w.exitonclick()
 
 if __name__ == '__main__':
-    display('sequences_public.txt','folding.txt')
+    display('sequences.txt','folding.txt')
