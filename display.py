@@ -47,7 +47,7 @@ def display(config, sequences):
                     t.clear()
                 t.setpos(B[n])
                 m = 3
-            elif len(s) > 32:
+            elif len(s) >= 32:
                 if n > 0:
                     n = 0
                     t.clear()
@@ -57,13 +57,13 @@ def display(config, sequences):
                 t.setpos(C[n])
                 m = 15
             t.pendown()
-            w.tracer(0,0)
+            #w.tracer(0,0)
             for i, j in zip(c, s):
                 t.dot(10, color[j])
                 t.seth(degree[i])
                 t.forward(20)
             t.dot(10, color[s[len(s) - 1]])
-            w.update()
+            #w.update()
             if n == m:
                 n = 0
                 t.clear()
