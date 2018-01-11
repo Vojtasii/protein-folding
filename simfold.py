@@ -1,5 +1,7 @@
 import math
 from itertools import accumulate
+import operator
+import folding_utils
 from ComplexNumber import ComplexNumber
 from folding_utils import read_from_file
 
@@ -52,35 +54,51 @@ class BedSheetFolding(BaseFolding):
     def find_folding(self, seq):
         seq_len = len(seq)
         seq_parts = self.separate_seq_into_parts(seq)
-        #print(seq_parts, seq_len)
-        configuration = self.fold_sheet(seq_parts, math.ceil(math.sqrt(seq_len-seq_parts[0])), seq_len)
-        return configuration
+        configuration = super().find_folding(seq)
+        conf_dict = {}
+        limit = int(math.ceil(math.sqrt(seq_len - seq_parts[0]) / 2))
+        for row in range(limit, seq_len):
+            conf_dict[row] = self.free_energy(seq, self.fold_sheet(seq_parts, row, seq_len))
+        return self.fold_sheet(seq_parts, min(conf_dict, key=conf_dict.get), seq_len)
+
+    @staticmethod
+    def free_energy(seq, conf):
+        p = [ComplexNumber(0, 0)]
+        p.extend(accumulate(conf))
+        return folding_utils.compute_free_energy(seq, p)
 
     @staticmethod
     def fold_sheet(parts, row, length):
-        # indices = [s for s in accumulate(parts)]
-        configuration = [ComplexNumber(1, 0)] * (length - 1)
-        conf = ComplexNumber(0, 1)
-        skip = parts[0]
         iter_parts = iter(parts)
-        next(iter_parts)
-        color = 1
-        i = 0
+        part = next(iter_parts)
+        configuration = [ComplexNumber(1, 0)] * part  # Skip leading zeroes
+        tmp = [ComplexNumber(1, 0)] * (length - 1 - part)
+        conf = ComplexNumber(0, 1)
+        color = True
         step = 0
-        for part in iter_parts:
-            if color:
-                overhang = part + step - row
-                while overhang > 0:
-                    configuration[skip + i + row - step - 1] *= conf
-                    overhang -= row - step
-                    step = 0
-
-            if (i + 1) % row == 0:
-                configuration[skip + i] *= conf
-                configuration = [c * ComplexNumber(-1, 0) if s > skip + i else c for s, c in enumerate(configuration)]
-                conf *= ComplexNumber(-1, 0)
+        back = 0
+        part = next(iter_parts)
+        next_part = part
+        tmp_len = len(tmp)
+        for i in range(tmp_len):
+            step += 1
+            if i + 1 == next_part:
+                color = not color
+                part = next(iter_parts)
+                next_part += part
+            if step == row:
+                overhang = next_part - i - 1
+                if not color and overhang >= 2 - back:
+                    step -= 1
+                    back -= 1
+                else:
+                    tmp[i] *= conf
+                    tmp = [c * ComplexNumber(-1, 0) if k > i else c for k, c in enumerate(tmp)]
+                    conf *= ComplexNumber(-1, 0)
+                    step = back
+                    back = 0
+        configuration.extend(tmp)
         return configuration
-
 
     @staticmethod
     def separate_seq_into_parts(seq):
@@ -89,7 +107,6 @@ class BedSheetFolding(BaseFolding):
         part = 0
         for am in seq:
             if am != color:
-                #print(am, color, am != color)
                 color = am
                 parts.append(part)
                 part = 1
@@ -98,6 +115,3 @@ class BedSheetFolding(BaseFolding):
         if part != 0:
             parts.append(part)
         return parts
-
-
-

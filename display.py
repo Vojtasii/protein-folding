@@ -1,5 +1,8 @@
 import turtle
 
+SEQ_DIR = 'sequences_public.txt'
+CONF_DIR = 'folding.txt'
+
 A = (0,-100)
 
 B = [(-150,50), (150,50), (-150,-250), (150,-250)]
@@ -10,7 +13,8 @@ C = [(-225,125), (-75,125), (75,125), (225,125),
      (-225,-325), (-75,-325), (75,-325), (225,-325)]
 
 degree = {'1': 0, '-1': 180, '1j': 90, '-1j': 270}
-color = {'0': 'dark orange', '1': 'turquoise'}
+color = {'1': 'dark orange', '0': 'turquoise'}
+
 
 def setup_window():
     t_start = turtle.Turtle()
@@ -21,11 +25,12 @@ def setup_window():
     w.title('< Title >')
     t_start.penup()
     t_start.setpos(0, 350)
-    t_start.write('< Some text here >', align='center', font=('Adobe Song Std L', '30', 'normal'))
+    t_start.write('Protein Folding', align='center', font=('Adobe Song Std L', '30', 'normal'))
     t_start.setpos(-300,300)
     t_start.pendown()
     t_start.forward(600)
     return w
+
 
 def display(config, sequences):
     w = setup_window()
@@ -71,5 +76,6 @@ def display(config, sequences):
                 n += 1
     w.exitonclick()
 
+
 if __name__ == '__main__':
-    display('folding.txt', 'sequences_public.txt')
+    display(CONF_DIR, SEQ_DIR)
