@@ -41,7 +41,7 @@ def display(config, sequences):
             c = config.split()
             s = seq.split()
             t.penup()
-            if 8 < len(s) < 32:
+            if 16 < len(s) < 32:
                 if n > 3:
                     n = 0
                     t.clear()
