@@ -54,12 +54,12 @@ class BedSheetFolding(BaseFolding):
     def find_folding(self, seq):
         seq_len = len(seq)
         seq_parts = self.separate_seq_into_parts(seq)
-        configuration = super().find_folding(seq)
         conf_dict = {}
-        limit = int(math.ceil(math.sqrt(seq_len - seq_parts[0]) / 2))
-        for row in range(limit, seq_len):
+        max_row = 20 if seq_len > 20 else seq_len
+        for row in range(1, max_row):
             conf_dict[row] = self.free_energy(seq, self.fold_sheet(seq_parts, row, seq_len))
-        return self.fold_sheet(seq_parts, min(conf_dict, key=conf_dict.get), seq_len)
+        best_row = min(conf_dict.keys(), key=(lambda k: conf_dict[k]))
+        return self.fold_sheet(seq_parts, best_row, seq_len)
 
     @staticmethod
     def free_energy(seq, conf):

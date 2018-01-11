@@ -1,6 +1,6 @@
 import turtle
 
-SEQ_DIR = 'sequences_public.txt'
+SEQ_DIR = 'sequences.txt'
 CONF_DIR = 'folding.txt'
 
 A = (0,-100)
