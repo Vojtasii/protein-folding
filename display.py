@@ -34,7 +34,7 @@ def display(config, sequences):
             s = seq.split()
             #w.tracer(0,0)
 
-            # ... inputting
+            # ... outputting
             p = update_text(counter, len(s))
             line.penup(), dot.penup()
             if 17 < len(s) < 70:
