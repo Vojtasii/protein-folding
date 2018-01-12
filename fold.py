@@ -3,8 +3,8 @@ import simfold
 import folding_utils
 from ComplexNumber import ComplexNumber
 
-SEQ_FILE = 'sequence.txt'
-#SEQ_FILE = 'sequences_public.txt'
+#SEQ_FILE = 'sequence.txt'
+SEQ_FILE = 'sequences_public.txt'
 CONF_FILE = 'folding.txt'
 
 
@@ -26,10 +26,16 @@ if __name__ == '__main__':
     pf.fold(SEQ_FILE)
     folding_list = pf.get_folding_list()
     write_configurations(CONF_FILE, folding_list)
+    old = simfold.BedSheetFoldingOld()
+    old.fold(SEQ_FILE)
+    folding_list_old = old.get_folding_list()
+    #write_configurations(CONF_FILE, folding_list_old)
     total = 0
-    '''
-    for fe in get_free_energy(CONF_FILE, folding_list):
-        total += fe
-    print(total)
-    '''
+    total_old = 0
+    for i, fe in enumerate(zip(get_free_energy(CONF_FILE, folding_list), get_free_energy(CONF_FILE, folding_list_old))):
+        print(i + 1, fe[0], fe[1], fe[0] - fe[1])
+        total += fe[0]
+        total_old += fe[1]
+    print(total, total_old)
+
 

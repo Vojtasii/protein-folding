@@ -1,8 +1,8 @@
 from display_utils import *
 import time
 
-SEQ_FILE = 'sequence.txt'
-#SEQ_FILE = 'sequences_public.txt'
+#SEQ_FILE = 'sequence.txt'
+SEQ_FILE = 'sequences_public.txt'
 CONF_FILE = 'folding.txt'
 
 A = ((-45,-15), (-65, -45), (-105,-60))
@@ -33,7 +33,7 @@ def display(config, sequences):
             counter += 1
             c = conf.split()
             s = seq.split()
-            #w.tracer(0,0)
+            w.tracer(0,0)
 
             # ... outputting
             p = update_text(counter, len(s))
@@ -46,14 +46,15 @@ def display(config, sequences):
             draw_conf(line, dot, c, s)
             time.sleep(.2)
             a = draw_arrow()
-            #w.update()
+            w.update()
             time.sleep(.5)
 
             # ... cleaning
-            line.clear()
-            dot.clear()
-            p[0].clear(), p[1].clear(), p[2].clear()
-            a.clear()
+            if False:
+                line.clear()
+                dot.clear()
+                p[0].clear(), p[1].clear(), p[2].clear()
+                a.clear()
 
     w.exitonclick()
 
