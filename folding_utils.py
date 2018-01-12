@@ -7,7 +7,9 @@ def get_coordinates(seq, conf):
     pass
 
 
-def compute_free_energy(seq, pos):
+def compute_free_energy(seq, conf):
+    pos = [ComplexNumber(0, 0)]
+    pos.extend(itertools.accumulate(conf))
     pos_list = [pos[i] for i, x in enumerate(seq) if x == '1']
     energy = 0
     for comb in itertools.combinations(pos_list, 2):

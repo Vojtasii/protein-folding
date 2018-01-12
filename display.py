@@ -1,78 +1,59 @@
 from display_utils import *
+from folding_utils import compute_free_energy
+from ComplexNumber import ComplexNumber
 import time
 
 SEQ_DIR = 'sequences.txt'
 CONF_DIR = 'folding.txt'
 
-A = ((-45,-15), (-65, -45), (-105,-60))
+COMPLEX = {'1': (1, 0), '-1': (-1, 0), '1j': (0, 1), '-1j': (0, -1)}
 
-def draw_conf(t, d, c, s):
-    t.pendown()
-    for i, j in zip(c, s):
-        d.setpos(t.xcor(),t.ycor())
-        draw_line(t, 20, DEGREE[i])
-        d.dot(10, COLOR[j])
-    t.dot(10, COLOR[s[len(s) - 1]])
+def to_complex(conf):
+    """ Converts a configuration list into list of complex numbers for later use """
 
-def clear_screen(x, y):
-    pass
+    return [ComplexNumber(COMPLEX[c][0], COMPLEX[c][1]) for c in conf]
 
-def display(config, sequences):
-    w = setup_window()
-    line = create_turtle(color='grey')
-    dot = create_turtle()
-
-    global counter
+def display(configuration, sequences):
+    """ The Method of all methods that put it all together and display
+    how the brand-new calculated structure of amino acid might look like
+    in a fancy way of course :)
+    """
+    w = create_window()
+    ninja_turtles = summon_ninja_turtles()
     counter = 0
-    pos = 0
 
-    with open(config, 'rt', encoding='utf-8') as f, \
-            open(sequences, 'rt', encoding='utf-8') as f2:
-        for conf, seq in zip(f, f2):
+    # opes the files
+    with open(configuration, 'rt', encoding='utf-8') as fc, \
+            open(sequences, 'rt', encoding='utf-8') as fs:
+        # ... reads them line by line
+        for conf, seq in zip(fc, fs):
             counter += 1
-            c = conf.split()
-            s = seq.split()
+            conf = conf.split()
+            seq = seq.split()
+            energy = compute_free_energy(seq, to_complex(conf))
+
             #w.tracer(0,0)
 
-            # ... outputting
-            p = update_text(counter, len(s))
-            line.penup(), dot.penup()
-            if 17 < len(s) < 70:
-                pos = 1
-            elif len(s) >= 70:
-                pos = 2
-            line.setpos(A[pos])
-            draw_conf(line, dot, c, s)
-            time.sleep(.2)
-            a = draw_arrow()
+            # ... makes ninja turtles do their jobs
+            update_text(counter, len(seq), round(energy, 3))
+            draw_conf(conf, seq)
+            # ... a little rest here
+            time.sleep(.4)
+            # ...
+            draw_arrow()
+
             #w.update()
-            time.sleep(.5)
+            # ... gives the viewer some extra time to appreciate the beauty of folded protein
+            time.sleep(.6)
 
-            # ... cleaning
-            line.clear()
-            dot.clear()
-            p[0].clear(), p[1].clear(), p[2].clear()
-            a.clear()
+            #time.sleep(2)
 
+            # ... orders turtles to clean up the mess and start drawing again
+            for i in ninja_turtles:
+                i.clear()
+
+    # THE END :)
     w.exitonclick()
-
 
 if __name__ == '__main__':
     display(CONF_DIR, SEQ_DIR)
-
-'''
-B = [(-150,50), (150,50), (-150,-250), (150,-250)]
-
-C = [(-225,125), (-75,125), (75,125), (225,125),
-     (-225,-25), (-75,-25), (75,-25), (225,-25),
-     (-225,-175), (-75,-175), (75,-175), (225,-175),
-     (-225,-325), (-75,-325), (75,-325), (225,-325)]
-
-D = [(-25,25), (-25,-325)]
-
-E = [(-225,50), (-75,50), (75,50), (225,50),
-     (-225,-325), (-75,-325), (75,-325), (225,-325)]
-
-F = [(-225,25), (75,25),
-     (-225,-325), (75,-325)]
-'''
