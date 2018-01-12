@@ -7,8 +7,11 @@ L = 'left'
 R = 'right'
 C = 'center'
 
+A = ((-45,-15), (-65, -45), (-105,-60)) # position for output on screen
+
 def create_turtle(start = (0,0), color = 'black', angle = 0):
     """ Turtle setup """
+
     t = turtle.Turtle()
     t.hideturtle()
     t.penup()
@@ -18,8 +21,9 @@ def create_turtle(start = (0,0), color = 'black', angle = 0):
     t.seth(angle)
     return t
 
-def setup_window():
+def create_window():
     """ Window setup """
+
     w = turtle.Screen()
     w.setup(800,1000,1000,10)
     w.title('< Title >')
@@ -30,6 +34,61 @@ def setup_window():
     draw_line(t2, 600)
     draw_line(t3, 600)
     return w
+
+def summon_ninja_turtles():
+    """ Call for 6 main turtles that will be soon used in drawig output of protein folding on screen """
+
+    global Terri, Lerri, Michelangelo, Raphael, Leonardo, Donatello
+    Terri = create_turtle(color='grey')         # line maker
+    Lerri = create_turtle()                     # dots placer
+    Michelangelo = create_turtle((300, -245))   # prints the nnumber of protein
+    Raphael = create_turtle((-300, -275))       # tells proteins length
+    Leonardo = create_turtle((-300, -295))      # knows its energy
+    Donatello = create_turtle()                 # can draw a 3d-effect-like arrow
+    return Terri, Lerri, Leonardo, Michelangelo, Raphael, Donatello
+
+def draw_conf(c, s):
+    """ Draw a rotein folding on the screen """
+
+    if Terri.isdown():
+        Terri.penup()
+    if Lerri.isdown():
+        Lerri.penup()
+    Terri.setpos(A[update_position(len(s))])
+    Terri.pendown()
+    for i, j in zip(c, s):
+        Lerri.setpos(Terri.xcor(), Terri.ycor())
+        draw_line(Terri, 20, DEGREE[i])
+        Lerri.dot(10, COLOR[j])
+    Terri.dot(10, COLOR[s[len(s) - 1]])
+
+def update_text(num, length, energy=0):
+    """ Self-explanatory """
+
+    Michelangelo.write('{}.'.format(num), align=R, font=FONT)
+    Raphael.write('length   {}'.format(length), align=L, font=FONT)
+    Leonardo.write('energy    {}'.format(energy), align=L, font=FONT)
+
+def draw_arrow():
+    """ Self-explanatory """
+
+    Donatello.penup()
+    Donatello.setpos(285, -400)
+    Donatello.seth(270)
+    Donatello.pencolor(COLOR['0'])
+    draw_triangle(Donatello, 20)
+    Donatello.penup()
+    Donatello.setpos(281, -400)
+    Donatello.pencolor(COLOR['1'])
+    draw_triangle(Donatello, 20)
+
+def update_position(len_s):
+    if 17 < len_s < 70:
+        return 1
+    elif len_s >= 70:
+        return 2
+    else:
+        return 0
 
 def draw_line(t, n, d = 0):
     t.seth(d)
@@ -43,22 +102,3 @@ def draw_triangle(t, n):
     for i in range(3):
         t.forward(n)
         t.lt(120)
-
-def draw_arrow():
-    t = create_turtle((285, -400), COLOR['0'], 270)
-    draw_triangle(t, 20)
-    t.penup()
-    t.setpos(281, -400)
-    t.pencolor(COLOR['1'])
-    draw_triangle(t, 20)
-    return t
-
-def update_text(num, length, energy = 0):
-    t1 = create_turtle((300, -245))
-    t2 = create_turtle((-300, -275))
-    t3 = create_turtle((-300, -295))
-    t1.write('{}.'.format(num), align=R, font=FONT)
-    t2.write('length {}'.format(length), align=L, font=FONT)
-    t3.write('energy {}'.format(energy), align=L, font=FONT)
-    return t1, t2, t3
-

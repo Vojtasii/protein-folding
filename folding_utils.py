@@ -7,8 +7,10 @@ def get_coordinates(seq, conf):
     pass
 
 
-def compute_free_energy(seq, pos):
-    seq_len = len(seq)
+
+def compute_free_energy(seq, conf):
+    pos = [ComplexNumber(0, 0)]
+    pos.extend(itertools.accumulate(conf))
     strings = [str(p) for p in pos]
     if len(set(strings)) != len(strings):
         print("wrong")
