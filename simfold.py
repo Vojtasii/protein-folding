@@ -123,9 +123,7 @@ class BedSheetFolding(BaseFolding):
 
     @staticmethod
     def free_energy(seq, conf):
-        p = [ComplexNumber(0, 0)]
-        p.extend(accumulate(conf))
-        return folding_utils.compute_free_energy(seq, p)
+        return folding_utils.compute_free_energy(seq, conf)
 
 
 class BedSheetFoldingOld(BedSheetFolding):
@@ -159,51 +157,3 @@ class BedSheetFoldingOld(BedSheetFolding):
                     back = 0
         configuration.extend(tmp)
         return configuration
-    '''
-            iter_parts = iter(parts)
-        part = next(iter_parts)
-        configuration = [ComplexNumber(1, 0)] * part  # Skip leading zeroes
-        tmp_len = length - 1 - part
-        tmp = [ComplexNumber(1, 0)] * tmp_len
-        bend = ComplexNumber(0, 1)
-        color, first_row, loop, step, back = True, True, 0, 0, 0
-        part = next(iter_parts)
-        next_part = part
-        for i in range(tmp_len):
-            step += 1
-            if i + 1 == next_part:
-                color = not color
-                part = next(iter_parts)
-                next_part += part
-            if color and loop:
-                if loop == 2 or step == row:
-                    tmp[i] = ComplexNumber(0, 1)
-                else:
-                    tmp[i] = ComplexNumber(1, 0)
-                    step += 1
-                back = 0
-                loop = 0
-            elif not color and first_row and part > 1 and loop != -1:
-                loop = 1 if part % 2 else 2
-                step -= 1
-                back -= 1
-                loop_step = i - next_part + part + 1
-                if loop_step < part // 2:
-                    tmp[i] *= ComplexNumber(0, -1)
-                elif loop_step > part // 2:
-                    tmp[i] *= ComplexNumber(0, 1)
-            elif step >= row:
-                first_row = False
-                overhang = next_part - i - 1
-                if not color and overhang >= 2 - back:
-                    step -= 1
-                    back -= 1
-                else:
-                    tmp[i] *= bend
-                    tmp = [c * ComplexNumber(-1, 0) if k > i else c for k, c in enumerate(tmp)]
-                    bend *= ComplexNumber(-1, 0)
-                    step = back
-                    back = 0
-        configuration.extend(tmp)
-        return configuration
-    '''
