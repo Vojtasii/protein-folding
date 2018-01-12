@@ -1,5 +1,5 @@
 from display_utils import *
-from folding_utils import compute_free_energy
+from folding_utils import compute_free_energy_2
 from ComplexNumber import ComplexNumber
 import time
 
@@ -30,7 +30,7 @@ def display(configuration, sequences):
             counter += 1
             conf = conf.split()
             seq = seq.split()
-            energy = compute_free_energy(seq, to_complex(conf))
+            energy = compute_free_energy_2(seq, to_complex(conf))
 
             #w.tracer(0,0)
 
