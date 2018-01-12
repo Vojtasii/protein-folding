@@ -1,8 +1,9 @@
 from display_utils import *
 import time
 
-SEQ_DIR = 'sequences.txt'
-CONF_DIR = 'folding.txt'
+SEQ_FILE = 'sequence.txt'
+#SEQ_FILE = 'sequences_public.txt'
+CONF_FILE = 'folding.txt'
 
 A = ((-45,-15), (-65, -45), (-105,-60))
 
@@ -58,7 +59,7 @@ def display(config, sequences):
 
 
 if __name__ == '__main__':
-    display(CONF_DIR, SEQ_DIR)
+    display(CONF_FILE, SEQ_FILE)
 
 '''
 B = [(-150,50), (150,50), (-150,-250), (150,-250)]

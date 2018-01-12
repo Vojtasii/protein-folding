@@ -8,6 +8,8 @@ def get_coordinates(seq, conf):
 
 
 def compute_free_energy(seq, pos):
+    if len(pos) != len(set(pos)):
+        raise ValueError
     pos_list = [pos[i] for i, x in enumerate(seq) if x == '1']
     energy = 0
     for comb in itertools.combinations(pos_list, 2):

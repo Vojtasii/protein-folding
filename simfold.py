@@ -73,10 +73,8 @@ class BedSheetFolding(BaseFolding):
         part = next(iter_parts)
         configuration = [ComplexNumber(1, 0)] * part  # Skip leading zeroes
         tmp = [ComplexNumber(1, 0)] * (length - 1 - part)
-        conf = ComplexNumber(0, 1)
-        color = True
-        step = 0
-        back = 0
+        bend = ComplexNumber(0, 1)
+        color, first_row, loop, step, back = True, True, 0, 0, 0
         part = next(iter_parts)
         next_part = part
         tmp_len = len(tmp)
@@ -86,17 +84,40 @@ class BedSheetFolding(BaseFolding):
                 color = not color
                 part = next(iter_parts)
                 next_part += part
-            if step == row:
+            if color and loop > 0:
+                if loop == 2:
+                    tmp[i] *= ComplexNumber(0, 1)
+                    step += 1
+                else:
+                    tmp[i] = ComplexNumber(1, 0)
+                step -= back
+                back = 0
+                loop = -1
+
+            elif not color and first_row and part > 1 and loop != -1:
+                loop = 1 if part % 2 else 2
+                step -= 1
+                back -= 1
+                loop_step = i - next_part + part + 1
+                if loop_step < part // 2:
+                    tmp[i] *= ComplexNumber(0, -1)
+                elif loop_step > part // 2:
+                    tmp[i] *= ComplexNumber(0, 1)
+            elif step == row:
+                loop = 0
+                first_row = False
                 overhang = next_part - i - 1
                 if not color and overhang >= 2 - back:
                     step -= 1
                     back -= 1
                 else:
-                    tmp[i] *= conf
+                    tmp[i] *= bend
                     tmp = [c * ComplexNumber(-1, 0) if k > i else c for k, c in enumerate(tmp)]
-                    conf *= ComplexNumber(-1, 0)
+                    bend *= ComplexNumber(-1, 0)
                     step = back
                     back = 0
+            elif loop == -1:
+                loop = 0
         configuration.extend(tmp)
         return configuration
 
